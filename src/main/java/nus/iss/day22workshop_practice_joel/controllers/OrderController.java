@@ -73,8 +73,44 @@ public class OrderController {
     @GetMapping("/shippingaddress")
     public String getShippingAddressPage(Model model, HttpSession session){
 
-        return "shippingaddress";
+        if (!hasOrder(session)) {
+            return "redirect:/orders";
+        }
+
+        model.addAttribute("shippingdetails", new Order()); 
+
+        return "view2";
     }
+
+    @PostMapping("/checkout")
+    public String postCheckout(Model model, HttpSession session, @ModelAttribute Order incomingOrder){
+
+        System.out.printf(">>> Order form: %s\n", incomingOrder);
+
+        if (!hasOrder(session)) {
+            return "redirect:/orders";
+        }
+
+        Order order = getOrder(session);
+        incomingOrder.setOrderId(order.getListOfOrderDetails().get(0).getOrderId());
+
+        //insert data to orderservice
+        orderServices.insertOrder(incomingOrder);
+        int i = 0;
+        for (OrderDetail orderDetail : order.getListOfOrderDetails()) {
+            System.out.println(++i + ". " + orderDetail);
+            orderServices.insertOrderDetail(orderDetail.getOrderId(), orderDetail.getProduct(), orderDetail.getUnitPrice(), orderDetail.getDiscount(), orderDetail.getQuantity());
+        }
+
+        model.addAttribute("orderform", incomingOrder);
+
+        session.invalidate();
+        return "view3";
+    }
+
+    private Boolean hasOrder(HttpSession sess) {
+		return null != sess.getAttribute("order");
+	}
 
     private Order getOrder(HttpSession sess) {
 		Order order = (Order)sess.getAttribute("order");

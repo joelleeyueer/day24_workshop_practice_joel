@@ -12,8 +12,8 @@ public class OrderDetail {
     private int id; //autoincrement
     private int orderId;
     private String product;
-    private Float unitPrice;
-    private Float discount;
-    private Float quantity;
+    private float unitPrice;
+    private float discount;
+    private int quantity;
 
 }
