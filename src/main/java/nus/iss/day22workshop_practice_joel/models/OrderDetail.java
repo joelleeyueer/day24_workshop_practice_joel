@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OrderDetail {
 
-    private int id;
+    private int id; //autoincrement
     private int orderId;
     private String product;
     private Float unitPrice;

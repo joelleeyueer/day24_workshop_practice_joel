@@ -15,11 +15,15 @@ public class Order {
 
     private List<OrderDetail> listOfOrderDetails = new ArrayList<OrderDetail>();
 
-    private int orderId;
+    private int orderId; //autoincrement
     private Date orderDate;
     private String customerName;
     private String shipAddress;
     private String notes;
     private Float tax;
+
+    public void addToList(OrderDetail orderDetail){
+        listOfOrderDetails.add(orderDetail);
+    }
     
 }
